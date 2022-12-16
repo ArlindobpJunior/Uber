@@ -1,19 +1,30 @@
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import React from "react";
+import MapView, {
+  PROVIDER_GOOGLE,
+  Marker,
+  MyCustomMarkerView,
+} from "react-native-maps";
 
 const HomeMap = () => {
   return (
-    <View
-      style={{
-        height: 300,
-        backgroundColor: "#a0abff",
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 20,
+    <MapView
+      style={{ height: "100%", width: "100%" }}
+      provider={PROVIDER_GOOGLE}
+      initialRegion={{
+        latitude: -23.01869,
+        longitude: -43.48009,
+        latitudeDelta: 0.0222,
+        longitudeDelta: 0.0111,
       }}
     >
-      <Text>HomeMap</Text>
-    </View>
+      <Marker coordinate={{ latitude: -23.01869, longitude: -43.48009 }}>
+        <Image
+          style={{ width: 40, height: 40, resizeMode: "contain" }}
+          source={require("../../assets/images/UberXL.png")}
+        />
+      </Marker>
+    </MapView>
   );
 };
 

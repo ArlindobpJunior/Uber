@@ -1,34 +1,56 @@
 import { View, TextInput, SafeAreaView } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import styles from "./styles";
+import { GOOGLE_MAPS_APIKEY } from "@env";
 
 const DestinationSearch = () => {
-  const [fromText, setFromText] = useState("");
-  const [destinationText, setDestinationText] = useState("");
+  const [originPlace, setOriginPlace] = useState(null);
+  const [destinationPlace, setDestinationPlace] = useState(null);
+
+  useEffect(() => {
+    if (originPlace && destinationPlace) {
+      console.warn("Redirect to result");
+    }
+  }, [originPlace, destinationPlace]);
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <TextInput
-          value={fromText}
-          onChangeText={setFromText}
-          style={styles.textInput}
+        <GooglePlacesAutocomplete
           placeholder="Origem"
-        />
-        <TextInput
-          value={destinationText}
-          onChangeText={setDestinationText}
-          style={styles.textInput}
-          placeholder="Destino"
+          listViewDisplayed={"auto"}
+          fetchDetails={true}
+          enablePoweredByContainer={false}
+          minLength={2}
+          styles={{
+            textInput: styles.textInput,
+          }}
+          onPress={(data, details = null) => {
+            setOriginPlace({ data, details });
+            console.log(data, details);
+          }}
+          // onFail={(error) => console.log(error)}
+          // onNotFound={() => console.log("no results")}
+          query={{
+            key: GOOGLE_MAPS_APIKEY,
+            language: "pt",
+          }}
         />
 
         <GooglePlacesAutocomplete
-          placeholder="Search"
+          placeholder="Destino"
+          listViewDisplayed={"auto"}
+          fetchDetails={true}
+          styles={{
+            textInput: styles.textInput,
+          }}
           onPress={(data, details = null) => {
-            // 'details' is provided when fetchDetails = true
+            setDestinationPlace({ data, details });
             console.log(data, details);
           }}
+          // onFail={(error) => console.log(error)}
+          // onNotFound={() => console.log("no results")}
           query={{
             key: "AIzaSyDgWNlOFvSw4gDl8Ar3zxczYV3sZx87dyM",
             language: "pt",
